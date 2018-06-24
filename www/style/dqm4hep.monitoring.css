@@ -1,0 +1,120 @@
+
+ul.fancytree-container {
+  border: none;
+}
+.dqm4hep-tree-view {
+  /* display: flex;
+  flex-direction: column;
+  height: 100%; */
+  /* background: white; */
+  
+}
+.dqm4hep-tree-view-button {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  color: black;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  margin-top: 1px;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+.dqm4hep-tree-view-button-active, .dqm4hep-tree-view-button:hover {
+  background-color: #cccccc;
+}
+.dqm4hep-tree-view-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  justify-content: space-between;
+}
+.dqm4hep-multiview-header {
+  color: black;
+  width: 100%;
+  /* height: 100%; */
+  margin-top: 1px;
+  border: none;
+  text-align: left;
+  font-size: 15px;
+  border-bottom: 2px solid black;
+  border-bottom-color: #4d4d4d;
+}
+.dqm4hep-multiview-container {
+  overflow: auto;
+}
+.dqm4hep-tree-view-buttons-container {
+  /* display: block; */
+  /* width: inherit; */
+  /* position: -webkit-sticky;
+  position: absolute; */
+  /* bottom: 0; */
+  background: white !important;
+  /* overflow: hidden; */
+}
+.layout-no-resizer {
+  border: none;
+}
+.layout-no-frame {
+  overflow: inherit;
+  border: none;
+  /* background: inherit; */
+}
+.dqm4hep-tree-view-buttons {
+  vertical-align: center;
+  /* min-width: 150px;*/
+  max-width: 150px;
+  width: 45%;
+  display: inline;
+  margin: auto;
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+  /*margin-top: 5px;*/
+  /*margin-bottom: 5px;*/
+  /* padding: 2% 2%; */
+  /* background: none; */
+  /* color: inherit; */
+}
+.dqm4hep-rc-container {
+  /* min-height: 80px; */
+  background: #ff8080;
+}
+.dqm4hep-rc-container h3 {
+  font-size: 30px;
+}
+.dqm4hep-rc-container-active, .dqm4hep-rc-container {
+  background: #9ae59a;
+}
+/*.dqm4hep-tree-view-buttons:focus {
+  outline: none;
+}
+.dqm4hep-tree-view-buttons > span {
+  vertical-align: bottom;
+}
+.dqm4hep-tree-view-buttons:hover {
+  border-color: black;
+  background-color: rgba(63, 81, 181, 0.1);
+} */
+
+
+.canvas-view {
+  background-color: #F0F0F0;
+  width: 75%;
+}
+.drawing {
+  position: absolute; 
+  left:1px; 
+  top:1px; 
+  bottom:1px; 
+  right:1px
+}
+.canvas-widget {
+  overflow: hidden;
+}
+.ui-dialog .ui-dialog-titlebar {
+  position: relative;
+  border: none;
+  background-color: #FFFFFF;
+}
