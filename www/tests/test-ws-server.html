@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Test DQM net</title>
+  <meta charset="UTF-8">
+
+  <script type="text/javascript" src="../scripts/dqm4hep.js"> </script>
+
+  <script type="text/javascript">
+  window.onload = function() {
+    console.log("debug");
+    
+    var requestInput = document.getElementById("request-input");
+    var requestButton = document.getElementById("send-request");
+    var requestOutput = document.getElementById("request-output");
+    var commandInput = document.getElementById("command-input");
+    var commandButton = document.getElementById("send-command");
+    var intServiceContent = document.getElementById("test-int");
+    var floatServiceContent = document.getElementById("test-float");
+    
+    var client = new dqm4hep.net.Client({
+      port: 8091,
+      host: "localhost"
+    });
+    
+    client.subscribe("/test/int", function(data) {
+      intServiceContent.innerHTML = data;
+    });
+    
+    client.subscribe("/test/float", function(data) {
+      floatServiceContent.innerHTML = data;
+    });
+    
+    requestButton.addEventListener('click', function() {
+      var data = requestInput.value;
+      client.sendRequest("/test/request", data, function(response) {
+        requestOutput.innerHTML = response;
+      });
+    });
+    
+    commandButton.addEventListener('click', function() {
+      var data = commandInput.value;
+      client.sendCommand("/test/command", data);
+    });
+  };
+
+  </script>
+</head>
+
+<body>
+  <h1> Test client </h1>
+  
+  <h2> Test request </h2>
+  <div><input id="request-input" type="text"/> <button id="send-request">Send request</button></div>
+  <div>Request message: <span id="request-output" /></div>
+  </br>
+  
+  <h2> Test command </h2>
+  <div><input id="command-input" type="text"/><button id="send-command">Send command</button></div>
+  </br>
+  
+  <h2> Test service </h2>
+  <div>Test int service: <span id="test-int"/> </div>
+  <div>Test float service: <span id="test-float"/></div>
+  </br>
+
+</body>
+
+</html>
