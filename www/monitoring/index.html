@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Test monitoring</title>
+
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      
+      <script type="text/javascript" src="../scripts/dqm4hep.js"></script>
+      
+      <script type="text/javascript">
+        window.addEventListener('load', function() {
+          // the tree view - left panel
+          var treeView = document.createElement("div");
+          treeView.classList.add("ui-layout-west");
+          treeView.classList.add("dqm4hep-tree-view");
+          document.body.appendChild(treeView);
+          
+          // the canvas view - center panel
+          var canvasView = document.createElement("div");
+          canvasView.classList.add("ui-layout-center");
+          canvasView.classList.add("canvas-view");
+          document.body.appendChild(canvasView);
+          
+          // collector tree view - left panel
+          var collectorViewDiv = document.createElement("div");
+          collectorViewDiv.classList.add("ui-layout-center");
+          // collectorViewDiv.classList.add("dqm4hep-tree-view");
+          treeView.appendChild(collectorViewDiv);
+          
+          // buttons - left panel
+          var buttonsContainer = document.createElement("div");
+          // buttonsContainer.classList.add("dqm4hep-tree-view-buttons-container");
+          buttonsContainer.classList.add("ui-layout-south");
+          var clearButton = document.createElement("button");
+          clearButton.classList.add("dqm4hep-tree-view-buttons");
+          clearButton.innerHTML = "Clear";
+          clearButton.addEventListener('click', function(button) {
+            collectorView.clear();
+          });
+          buttonsContainer.appendChild(clearButton);
+          var browseButton = document.createElement("button");
+          browseButton.classList.add("dqm4hep-tree-view-buttons");
+          browseButton.classList.add("button--winona");
+          browseButton.innerHTML = "Browse";
+          buttonsContainer.appendChild(browseButton);
+          treeView.appendChild(buttonsContainer);
+          
+          document.body.appendChild(canvasView);
+          $('body').layout({
+            west__size: .25,
+            west__childOptions: {
+              south__resizable: false,
+              south__closable: false,
+              south__resizerClass: "layout-no-resizer",
+              south__paneClass: "layout-no-frame"
+              // center__paneClass: "layout-no-frame"
+            }
+          });
+          
+          console.log(dqm4hep);
+          console.log(dqm4hep.core);
+          console.log(dqm4hep.net);
+          console.log(dqm4hep.monitoring);
+          
+          var collectorView = new dqm4hep.monitoring.MultiCollectorTreeView({
+            element: collectorViewDiv,
+            elementDblClick: function(event, ui) {
+              console.log("Draw me !! (" + ui.element.name + ")");
+              var canvas = new dqm4hep.monitoring.RootCanvas({
+                parent: canvasView,
+                monitorElement: ui.element
+              });
+            },
+            updateRequested: function(event, ui) {
+              console.log("Update request for node " + ui.element.name);
+            },
+            drawRequested: function(event, ui) {
+              var str = ui.current ? "current" : "new";
+              console.log("Draw request for node " + ui.element.name + " in " + str + " canvas");
+              console.log(ui.element);
+            }
+          });
+          
+          var temperature = {
+            name: "Temperature",
+            path: "/Sensors",
+            module: "SlowControl",
+            collector: "CentralCollector"
+          };
+          var pressure = {
+            name: "Pressure",
+            path: "/Sensors",
+            module: "SlowControl",
+            collector: "CentralCollector"
+          };
+          
+          var rate = {
+            name: "Rate",
+            path: "/",
+            module: "BeamAnalysis",
+            collector: "CentralCollector"
+          };
+          var particleSpecies = {
+            name: "Particles",
+            path: "/",
+            module: "BeamAnalysis",
+            collector: "CentralCollector"
+          };
+          
+          var histo1 = JSROOT.CreateTH1(80,0,100);
+          histo1.fName = "histo1";
+          histo1.fTitle = "A test histogram (1)";
+          histo1.Fill(0, 10);
+          histo1.Fill(15, 10);
+          
+          var anotherElement = {
+            rootObject: histo1,
+            name: "Test",
+            path: "/",
+            module: "ExampleModule",
+            collector: "TestCollector",
+            description: "Pouette pouette cacahuette this is a long description that takes to much space for a tooltip. What should we do ?"
+          };
+          
+          collectorView.addElement(temperature);
+          collectorView.addElement(pressure);
+          collectorView.addElement(rate);
+          collectorView.addElement(particleSpecies);
+          collectorView.addElement(anotherElement);
+        });
+      </script>
+  </head>
+  <body>
+  </body>
+</html>
