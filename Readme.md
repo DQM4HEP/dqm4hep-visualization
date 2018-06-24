@@ -9,10 +9,6 @@
 
 The building process is managed by [CMake](http://cmake.org).
 
-Dependencies :
-- c++11 compiler
-- Qt5 (>= 5.3)
-- [ROOT](https://github.com/root-project/root), version 6 required
 
 In the top level directory :
 
@@ -21,13 +17,12 @@ mkdir build
 cd build
 cmake [-DOPTIONS=...] ..
 make install
-ctest # to check your installation
 ```
 
 <img src="https://www.gnu.org/graphics/gplv3-127x51.png" align="right" />
 
 ## License and Copyright
-Copyright (C), dqm4hep-core Authors
+Copyright (C), dqm4hep-visualization Authors
 
 dqm4hep-visualization is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
