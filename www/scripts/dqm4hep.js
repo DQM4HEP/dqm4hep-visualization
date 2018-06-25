@@ -14,6 +14,69 @@
   factory(dqm4hep);
   
 })(function(dqm4hep) {
+  
+  dqm4hep.loglevel = {
+    all:       0,
+    debug:     1,
+    info:      2,
+    warning:   3,
+    error:     4,
+    critical:  5
+  };
+  
+  dqm4hep.logfunction = {
+    all: (typeof console != 'undefined') && (typeof console.log == 'function') ? console.log : function() {},
+    debug: (typeof console != 'undefined') && (typeof console.log == 'function') ? console.log : function() {},
+    info: (typeof console != 'undefined') && (typeof console.info == 'function') ? console.info : function() {},
+    warning: (typeof console != 'undefined') && (typeof console.warn == 'function') ? console.warn : function() {},
+    error: (typeof console != 'undefined') && (typeof console.error == 'function') ? console.error : function() {},
+    critical: (typeof console != 'undefined') && (typeof console.log == 'function') ? console.error : function() {}
+  }
+  
+  var logLevel = dqm4hep.loglevel.info;
+  
+  dqm4hep.setLogLevel = function(level) {
+    if(typeof level != 'number') {
+      return;
+    }
+    if(level < dqm4hep.loglevel.all) {
+      logLevel = dqm4hep.loglevel.all;
+    }
+    if(level > dqm4hep.loglevel.critical) {
+      logLevel = dqm4hep.loglevel.critical;
+    }
+    logLevel = level;
+  };
+  
+  dqm4hep.debug = function(message) {
+    if(logLevel <= dqm4hep.loglevel.debug) {
+      dqm4hep.logfunction.debug(message);
+    }
+  };
+  
+  dqm4hep.info = function(message) {
+    if(logLevel <= dqm4hep.loglevel.info) {
+      dqm4hep.logfunction.info(message);
+    }
+  };
+  
+  dqm4hep.warning = function(message) {
+    if(logLevel <= dqm4hep.loglevel.warning) {
+      dqm4hep.logfunction.warning(message);
+    }
+  };
+  
+  dqm4hep.error = function(message) {
+    if(logLevel <= dqm4hep.loglevel.error) {
+      dqm4hep.logfunction.error(message);
+    }
+  };
+  
+  dqm4hep.critical = function(message) {
+    if(logLevel <= dqm4hep.loglevel.critical) {
+      dqm4hep.logfunction.critical(message);
+    }
+  };
 
   var allScripts = [
     'jsroot/scripts/JSRootCore.js?2d&hist&hierarchy',
@@ -42,24 +105,31 @@
     var script = headScripts[n];
     var pos = script.src.search("dqm4hep.js");
     if(pos > 0) {
+      var initLoglevel = script.getAttribute('data-loglevel');
+      if(typeof initLoglevel == 'string') {
+        if(Object.keys(dqm4hep.loglevel).indexOf(initLoglevel) > 0) {
+          dqm4hep.setLogLevel(dqm4hep.loglevel[initLoglevel]);
+        }
+      }
       scriptsPath = script.src.substring(0, pos);
       break;
     }
   }
   var stylesheetsPath = scriptsPath + "../style/";
-  console.log( "Set DQM4hep scripts path: " + scriptsPath );
-  console.log( "Set DQM4hep stylesheets path: " + stylesheetsPath );
+  dqm4hep.debug( "Set DQM4hep scripts path: " + scriptsPath );
+  dqm4hep.debug( "Set DQM4hep stylesheets path: " + stylesheetsPath );
   
   function loadScripts(scripts){
     var script = scripts.shift();
     var element = document.createElement('script');
     document.head.appendChild(element);
+    dqm4hep.debug( "DQM4hep adding script: " + scriptsPath + script );
     element.onload = function(evt){
       if (scripts.length) {
           loadScripts(scripts);
       }
     };
-    element.src = scriptsPath + script;    
+    element.src = scriptsPath + script;
   }
   
   function loadStylesheets(styles){
@@ -69,6 +139,7 @@
     element.setAttribute("type", "text/css");
     element.setAttribute("href", stylesheetsPath + style);
     document.head.appendChild(element);
+    dqm4hep.debug( "DQM4hep adding stylesheet: " + stylesheetsPath + style );
     if(styles.length > 0) {
       loadStylesheets(styles);
     }
