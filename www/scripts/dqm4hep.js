@@ -20,19 +20,19 @@
     'jsroot/scripts/jquery.min.js',
     'jsroot/scripts/jquery-ui.min.js',
     'jquery.layout-1.3.0.js',
-    // 'fancytree/dist/jquery.fancytree.min.js',
     'fancytree/dist/jquery.fancytree-all-deps.min.js',
-    // 'jquery/jquery.ui-contextmenu.min.js',
+    'jquery.contextMenu.min.js',
     'reconnecting-websocket.min.js',
     'dqm4hep.core.js',
-    'dqm4hep.net.js'
-    // 'dqm4hep.monitoring.js'
+    'dqm4hep.net.js',
+    'dqm4hep.monitoring.js'
   ];
   
   var allStyles = [
     "jquery-ui.css",
     "layout-default-latest.css",
     "ui.fancytree.min.css",
+    "jquery.contextMenu.min.css",
     "dqm4hep.monitoring.css"
   ];
   
