@@ -117,7 +117,8 @@ ul.fancytree-container {
 .ui-dialog .ui-dialog-title {
   text-align: center;
 }
-#browser {
+
+.dqm4hep-browser {
   position: fixed;
   display: none;
   width: 100%;
