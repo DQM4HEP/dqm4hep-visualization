@@ -15,6 +15,55 @@
   
 })(function(dqm4hep) {
   
+  LoggingBar = function() {
+    var container = document.createElement('div');
+    container.classList.add("dqm4hep-logging-bar");
+    window.addEventListener('load', function() {
+      document.body.appendChild(container);
+    });
+    
+    var logMessage = function(color, message) {
+      container.style.display = "block";
+      container.innerHTML = message;
+      container.style.backgroundColor = color;
+      $(container).delay(2000).fadeOut(1000, function() {
+        container.style.display = "none";
+      });
+    };
+    
+    var concatenateArguments = function(message) {
+      return Array.from(arguments).map(function(arg) {
+        return String(arg);
+      }).join(" ");
+    };
+    
+    this.all = function(message) {
+      logMessage("#ccffdd", concatenateArguments(message));
+    };
+    
+    this.debug = function(message) {
+      logMessage("#ccffdd", concatenateArguments(message));
+    };
+    
+    this.info = function(message) {
+      logMessage("#99ccff", concatenateArguments(message));
+    };
+    
+    this.warning = function(message) {
+      logMessage("#ffff99", concatenateArguments(message));
+    };
+    
+    this.error = function(message) {
+      logMessage("#ff9999", concatenateArguments(message));
+    };
+    
+    this.critical = function(message) {
+      logMessage("#ff9999", concatenateArguments(message));
+    };
+  };
+  
+  dqm4hep.loggingBar = new LoggingBar();
+  
   dqm4hep.loglevel = {
     all:       0,
     debug:     1,
@@ -25,12 +74,54 @@
   };
   
   dqm4hep.logfunction = {
-    all: (typeof console != 'undefined') && (typeof console.log == 'function') ? console.log : function() {},
-    debug: (typeof console != 'undefined') && (typeof console.log == 'function') ? console.log : function() {},
-    info: (typeof console != 'undefined') && (typeof console.info == 'function') ? console.info : function() {},
-    warning: (typeof console != 'undefined') && (typeof console.warn == 'function') ? console.warn : function() {},
-    error: (typeof console != 'undefined') && (typeof console.error == 'function') ? console.error : function() {},
-    critical: (typeof console != 'undefined') && (typeof console.log == 'function') ? console.error : function() {}
+    all: function(message) {
+      if((typeof console != 'undefined') && (typeof console.log == 'function')) {
+       console.log(message);        
+     }
+      if(typeof jQuery != 'undefined') {
+        dqm4hep.loggingBar.all(message);
+      }
+    },
+    debug: function(message) {
+      if((typeof console != 'undefined') && (typeof console.log == 'function')) {
+       console.log(message);
+     }
+     if(typeof jQuery != 'undefined') {
+       dqm4hep.loggingBar.debug(message);
+     }
+    },
+    info: function(message) {
+      if((typeof console != 'undefined') && (typeof console.info == 'function')) {
+       console.info(message);
+     }
+     if(typeof jQuery != 'undefined') {
+       dqm4hep.loggingBar.info(message);
+     }
+    },
+    warning: function(message) {
+      if((typeof console != 'undefined') && (typeof console.warn == 'function')) {
+       console.warn(message);
+      }
+      if(typeof jQuery != 'undefined') {
+        dqm4hep.loggingBar.warning(message);
+      }
+    },
+    error: function(message) {
+      if((typeof console != 'undefined') && (typeof console.error == 'function')) {
+       console.error(message);
+      }
+      if(typeof jQuery != 'undefined') {
+        dqm4hep.loggingBar.error(message);
+      }
+    },
+    critical: function(message) {
+      if((typeof console != 'undefined') && (typeof console.error == 'function')) {
+       console.error(message);
+      }
+      if(typeof jQuery != 'undefined') {
+        dqm4hep.loggingBar.critical(message);
+      }
+    }
   }
   
   var logLevel = dqm4hep.loglevel.info;
