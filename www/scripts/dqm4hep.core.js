@@ -56,7 +56,7 @@
    * MonitorElement class
    * @param {object} object monitor element description
    */
-  MonitorElement = function(object) {
+  dqm4hep.core.MonitorElement = function(object) {
     this.object = null;
     this.reference = null;
     this.path = "";
@@ -89,6 +89,30 @@
       if(typeof emit == 'bool' && emit) {
         element.dispatchEvent(updateEvent);
       }
+    }
+    
+    this.propertiesEquals = function(other) {
+      if(other === undefined || other === null) {
+        return false;
+      }
+      if(other.path != this.path) {
+        return false;
+      }
+      var name = typeof this.object != 'undefined' ? this.object.fName : "";
+      var oname = typeof other.object != 'undefined' ? other.object.fName : "";
+      if(name != oname) {
+        return false;
+      }
+      if(other.name != this.name) {
+        return false;
+      }
+      if(other.module != this.module) {
+        return false;
+      }
+      if(other.collector != this.collector) {
+        return false;
+      }
+      return true;
     }
   
     this.update(object, false);
