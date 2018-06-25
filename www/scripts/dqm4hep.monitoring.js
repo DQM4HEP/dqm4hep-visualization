@@ -399,9 +399,6 @@
       appendTo: object.parent
     });
     
-    this.update(object.element, false);
-    JSROOT.resize(this.container, true);
-    
     this.handleMonitorElementUpdate = function(event) {
       this.update(event.element);
     };
@@ -416,11 +413,11 @@
 
     this.update = function(element) {
       if(monitorElement != null) {
-        monitorElement.removeEventListener('update', handleMonitorElementUpdate);
+        monitorElement.removeEventListener('update', this.handleMonitorElementUpdate);
       }
       monitorElement = element;
       if(monitorElement != null) {
-        monitorElement.addEventListener('update', handleMonitorElementUpdate);
+        monitorElement.addEventListener('update', this.handleMonitorElementUpdate);
       }
       var drawOption = "";
       var drawObject = null;
@@ -440,7 +437,10 @@
 
     this.close = function() {
       $(container).dialog("close");
-    }
+    };
+    
+    this.update(object.element, false);
+    JSROOT.resize(this.container, true);
   };
 
 
@@ -489,8 +489,10 @@
       if(element === undefined || element === null) {
         return false;
       }
-      if(element.object.name === undefined || element.object.name.length == 0) {
-        return false;
+      if(element.object != null) {
+        if(element.object.name === undefined || element.object.name.length == 0) {
+          return false;
+        }
       }
       if(element.path === undefined) {
         return false;
@@ -888,11 +890,21 @@
 
   //-----------------------------------------------------------
 
-  dqm4hep.monitoring.Browser = function(iparent) {
-    var parent = iparent;
+  dqm4hep.monitoring.Browser = function() {
+    var self = this;
+    var browser = document.createElement('div');
+    browser.classList.add('dqm4hep-browser');
+    $(browser).on('click', function(evt) {
+      if(evt.target !== this) {
+        return;
+      }
+      self.close();
+    });
+    
     var container = document.createElement('div');
     container.classList.add('dqm4hep-browser-container');
-    parent.appendChild(container);
+    browser.appendChild(container);
+    document.body.appendChild(browser);
     
     // The connexion area
     var connectionContainer = document.createElement('fieldset');
@@ -953,11 +965,25 @@
     buttonsContainer.appendChild(appendButton);
     var closeButton = document.createElement('button');
     closeButton.innerHTML = "Close";
+    $(closeButton).on('click', function(evt) {
+      if(evt.target !== this) {
+        return;
+      }
+      self.close();
+    });
     buttonsContainer.appendChild(closeButton);
     tableContainer.appendChild(buttonsContainer);
     
     var addRow = function(mod, path, name, type) {
       datatable.addRow([mod, path, name, type]);
+    }
+    
+    this.open = function() {
+      browser.style.display = "block";
+    }
+    
+    this.close = function() {
+      browser.style.display = "none";
     }
     
     addRow("BeamAnalysis", "/", "SpotXY", "TH2F");
