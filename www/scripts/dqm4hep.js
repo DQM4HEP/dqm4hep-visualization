@@ -94,7 +94,7 @@
   var allStyles = [
     "jquery-ui.css",
     "layout-default-latest.css",
-    "ui.fancytree.min.css",
+    "fancytree/skin-lion/ui.fancytree.min.css",
     "jquery.contextMenu.min.css",
     "dqm4hep.monitoring.css"
   ];
