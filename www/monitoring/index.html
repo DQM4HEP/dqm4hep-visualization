@@ -7,31 +7,16 @@
       <meta charset="utf-8"/>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       
-      <script type="text/javascript" src="../scripts/dqm4hep.js"></script>
+      <script type="text/javascript" src="../scripts/dqm4hep.js" data-loglevel="info"></script>
       
       <script type="text/javascript">
-        function closeBrowser() {
-          document.getElementById("browser").style.display = "none";
-        }
-        
-        function openBrowser() {
-          document.getElementById("browser").style.display = "block";
-        }
-      
+
         window.addEventListener('load', function() {
           var mainContainer = document.body;
           mainContainer.classList.add('main-container');
           
-          var browserParent = document.getElementById("browser");
-          $(browserParent).on('click', function(evt) {
-            if(evt.target !== this) {
-              return;
-            }
-            closeBrowser();
-            // evt.stopPropagation();
-          });
-          
-          var browser = new dqm4hep.monitoring.Browser(browserParent);
+          // browser - auto append to body
+          var browser = new dqm4hep.monitoring.Browser();
             
           // the tree view - left panel
           var treeView = document.createElement("div");
@@ -66,7 +51,7 @@
           browseButton.classList.add("dqm4hep-tree-view-buttons");
           browseButton.innerHTML = "Browse";
           browseButton.addEventListener('click', function(button) {
-            openBrowser();
+            browser.open();
           });
           buttonsContainer.appendChild(browseButton);
           treeView.appendChild(buttonsContainer);
@@ -173,6 +158,5 @@
       </script>
   </head>
   <body>
-    <div id="browser"></div>
   </body>
 </html>
