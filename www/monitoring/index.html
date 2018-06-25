@@ -9,28 +9,50 @@
       <script type="text/javascript" src="../scripts/dqm4hep.js"></script>
       
       <script type="text/javascript">
+        function closeBrowser() {
+          document.getElementById("browser").style.display = "none";
+        }
+        
+        function openBrowser() {
+          document.getElementById("browser").style.display = "block";
+        }
+      
         window.addEventListener('load', function() {
+          var mainContainer = document.body;
+          mainContainer.classList.add('main-container');
+          
+          var browserParent = document.getElementById("browser");
+          $(browserParent).on('click', function(evt) {
+            if(evt.target !== this) {
+              return;
+            }
+            closeBrowser();
+            // evt.stopPropagation();
+          });
+          
+          var browser = new dqm4hep.monitoring.Browser(browserParent);
+            
           // the tree view - left panel
           var treeView = document.createElement("div");
           treeView.classList.add("ui-layout-west");
           treeView.classList.add("dqm4hep-tree-view");
-          document.body.appendChild(treeView);
-          
+          mainContainer.appendChild(treeView);
+
           // the canvas view - center panel
           var canvasView = document.createElement("div");
           canvasView.classList.add("ui-layout-center");
           canvasView.classList.add("canvas-view");
-          document.body.appendChild(canvasView);
+          mainContainer.appendChild(canvasView);
+          
+          var multiCanvasView = new dqm4hep.monitoring.MultiCanvasView(canvasView);        
           
           // collector tree view - left panel
           var collectorViewDiv = document.createElement("div");
           collectorViewDiv.classList.add("ui-layout-center");
-          // collectorViewDiv.classList.add("dqm4hep-tree-view");
           treeView.appendChild(collectorViewDiv);
           
           // buttons - left panel
           var buttonsContainer = document.createElement("div");
-          // buttonsContainer.classList.add("dqm4hep-tree-view-buttons-container");
           buttonsContainer.classList.add("ui-layout-south");
           var clearButton = document.createElement("button");
           clearButton.classList.add("dqm4hep-tree-view-buttons");
@@ -41,13 +63,16 @@
           buttonsContainer.appendChild(clearButton);
           var browseButton = document.createElement("button");
           browseButton.classList.add("dqm4hep-tree-view-buttons");
-          browseButton.classList.add("button--winona");
           browseButton.innerHTML = "Browse";
+          browseButton.addEventListener('click', function(button) {
+            openBrowser();
+          });
           buttonsContainer.appendChild(browseButton);
           treeView.appendChild(buttonsContainer);
           
-          document.body.appendChild(canvasView);
-          $('body').layout({
+          mainContainer.appendChild(canvasView);
+          
+          $(mainContainer).layout({
             west__size: .25,
             west__childOptions: {
               south__resizable: false,
@@ -57,28 +82,43 @@
               // center__paneClass: "layout-no-frame"
             }
           });
+          // document.body.appendChild(mainContainer);
           
-          console.log(dqm4hep);
-          console.log(dqm4hep.core);
-          console.log(dqm4hep.net);
-          console.log(dqm4hep.monitoring);
+          
+          multiCanvasView.createCanvasArea();
           
           var collectorView = new dqm4hep.monitoring.MultiCollectorTreeView({
             element: collectorViewDiv,
             elementDblClick: function(event, ui) {
               console.log("Draw me !! (" + ui.element.name + ")");
-              var canvas = new dqm4hep.monitoring.RootCanvas({
-                parent: canvasView,
-                monitorElement: ui.element
-              });
+              console.log(ui.element);
+              var canvasArea;
+              if(multiCanvasView.nCanvasAreas() == 0) {
+                canvasArea = multiCanvasView.createCanvasArea();
+              }
+              else {
+                canvasArea = multiCanvasView.currentCanvasArea();
+              }
+              canvasArea.draw(ui.element);
             },
-            updateRequested: function(event, ui) {
+            updateRequested: function(ui) {
               console.log("Update request for node " + ui.element.name);
             },
-            drawRequested: function(event, ui) {
+            drawRequested: function(ui) {
               var str = ui.current ? "current" : "new";
               console.log("Draw request for node " + ui.element.name + " in " + str + " canvas");
               console.log(ui.element);
+              var canvasArea;
+              if(multiCanvasView.nCanvasAreas() == 0) {
+                canvasArea = multiCanvasView.createCanvasArea();
+              }
+              else if(ui.current) {
+                canvasArea = multiCanvasView.currentCanvasArea();
+              }
+              else {
+                canvasArea = multiCanvasView.createCanvasArea();
+              }
+              canvasArea.draw(ui.element);
             }
           });
           
@@ -132,5 +172,6 @@
       </script>
   </head>
   <body>
+    <div id="browser"></div>
   </body>
 </html>
