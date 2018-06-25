@@ -20,7 +20,7 @@
     'jsroot/scripts/jquery.min.js',
     'jsroot/scripts/jquery-ui.min.js',
     'jquery.layout-1.3.0.js',
-    'fancytree/dist/jquery.fancytree-all-deps.min.js',
+    'jquery.fancytree-all-deps.min.js',
     'jquery.contextMenu.min.js',
     'reconnecting-websocket.min.js',
     'dqm4hep.core.js',
